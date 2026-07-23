@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexConsult - Academia DevTools & Consulta Legal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header class="main-header">
+        <div class="header-content" style="display: flex; justify-content: space-between; align-items: center;">
+            <h1>🎓 Academia de Herramientas para Desarrolladores - LexConsult</h1>
+            <button class="toggle-sidebar-btn" onclick="toggleSidebar()" aria-label="Alternar barra lateral" style="padding: 8px 14px; background: #2563eb; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 500;">
+                🗂️ Ocultar / Mostrar Panel
+            </button>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <!-- Barra Lateral de Pestañas estilo DevTools -->
+        <nav class="sidebar-devtools" aria-label="Explorador de Herramientas">
+            <span class="sidebar-title">EXPLORADOR DE HERRAMIENTAS</span>
+            <button class="tab-btn active" onclick="mostrarModulo('elementos', event)">⚡ Elementos</button>
+            <button class="tab-btn" onclick="mostrarModulo('consola', event)">💬 Consola</button>
+            <button class="tab-btn" onclick="mostrarModulo('fuentes', event)">📄 Fuentes</button>
+            <button class="tab-btn" onclick="mostrarModulo('red', event)">🌐 Red</button>
+            <button class="tab-btn" onclick="mostrarModulo('memoria', event)">🧠 Memoria</button>
+            <button class="tab-btn" onclick="mostrarModulo('solicitud', event)">💾 Solicitud</button>
+            <button class="tab-btn" onclick="mostrarModulo('seguridad', event)">🔒 Seguridad</button>
+            <button class="tab-btn" onclick="mostrarModulo('faro', event)">🚦 Faro</button>
+            <button class="tab-btn" onclick="mostrarModulo('grabadora', event)">⏺️ Grabadora</button>
+        </nav>
+
+        <!-- Contenido Dinámico de los Módulos -->
+        <main class="content-area">
+            
+            <!-- MÓDULO 1: ELEMENTOS (Buscador Legal Interactivo) -->
+            <section id="modulo-elementos" class="content-module active">
+                <div class="card-docs-section">
+                    <h2>Elementos</h2>
+                    <p>Inspecciona el DOM y el CSS en tiempo real aplicado al sistema de leyes venezolanas y códigos legales.</p>
+                    
+                    <div class="search-box-container" style="margin-top: 20px;">
+                        <input type="text" id="searchInput" placeholder="Busca un artículo, código o término legal (ej. Código Civil, Penal, Constitución)..." onkeyup="realizarBusqueda()" style="width: 100%; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px;">
+                    </div>
+
+                    <div id="resultadosBusqueda" style="margin-top: 20px;">
+                        <!-- Los resultados de la base de datos se inyectarán aquí dinámicamente -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- MÓDULO 2: CONSOLA -->
+            <section id="modulo-consola" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Consola</h2>
+                    <p>Documentación interactiva de la consola de desarrollo front-end:</p>
+                    <ul style="margin: 15px 0 15px 20px; line-height: 1.6;">
+                        <li><strong>console.log():</strong> Utilizado para depurar el flujo general de la aplicación web y respuestas HTTP.</li>
+                        <li><strong>console.table():</strong> Estructura los registros jurídicos devueltos por SQLite en formato tabular legible.</li>
+                        <li><strong>console.error():</strong> Captura fallos de red asíncronos al consultar la API REST de Flask.</li>
+                    </ul>
+                    <pre style="background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 6px; overflow-x: auto;"><code>[Frontend DevTools] Consola inicializada correctamente.
+console.info("LexConsult core loaded successfully.");</code></pre>
+                </div>
+            </section>
+
+            <!-- MÓDULO 3: FUENTES -->
+            <section id="modulo-fuentes" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Fuentes</h2>
+                    <p>Documentación de la pestaña <strong>Fuentes (Sources)</strong>: Permite depurar scripts JavaScript asociados en <code>static/js/main.js</code>, establecer breakpoints de ejecución paso a paso y evaluar la jerarquía de archivos estáticos del proyecto.</p>
+                </div>
+            </section>
+
+            <!-- MÓDULO 4: RED -->
+            <section id="modulo-red" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Red</h2>
+                    <p>Documentación de la pestaña <strong>Red (Network)</strong>: Audita en tiempo real las peticiones HTTP asíncronas (Fetch/XHR) dirigidas hacia las rutas del backend en Flask, midiendo tiempos de latencia y la estructura JSON de la API: <code>/api/buscar?q=...</code></p>
+                </div>
+            </section>
+
+            <!-- MÓDULO 5: MEMORIA -->
+            <section id="modulo-memoria" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Memoria</h2>
+                    <p>Documentación de la pestaña <strong>Memoria (Memory)</strong>: Utilizada para analizar instantáneas de montones de memoria (Heap Snapshots) y detectar posibles pérdidas de memoria (memory leaks) durante consultas masivas de textos jurídicos en SQLite.</p>
+                </div>
+            </section>
+
+            <!-- MÓDULO 6: SOLICITUD -->
+            <section id="modulo-solicitud" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Solicitud</h2>
+                    <p>Documentación de la pestaña <strong>Aplicación / Almacenamiento (Application)</strong>: Inspecciona el almacenamiento local (LocalStorage), cookies, bases de datos IndexedDB y sesiones persistidas en el navegador del cliente.</p>
+                </div>
+            </section>
+
+            <!-- MÓDULO 7: SEGURIDAD -->
+            <section id="modulo-seguridad" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Seguridad</h2>
+                    <p>Documentación de la pestaña <strong>Seguridad (Security)</strong>: Verifica certificados SSL/TLS, estado de conexiones HTTPS y advertencias sobre recursos mixtos o scripts locales en entorno de desarrollo.</p>
+                </div>
+            </section>
+
+            <!-- MÓDULO 8: FARO (Lighthouse) -->
+            <section id="modulo-faro" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Faro (Lighthouse)</h2>
+                    <p>Documentación de la pestaña <strong>Faro (Lighthouse)</strong>: Ejecuta auditorías automatizadas para medir el rendimiento web, accesibilidad, optimización SEO y mejores prácticas de la plataforma legal.</p>
+                </div>
+            </section>
+
+            <!-- MÓDULO 9: GRABADORA -->
+            <section id="modulo-grabadora" class="content-module" style="display: none;">
+                <div class="card-docs-section">
+                    <h2>Grabadora</h2>
+                    <p>Documentación de la pestaña <strong>Grabadora (Recorder)</strong>: Permite registrar, reproducir y medir flujos de usuario automatizados paso a paso interactuando directamente con la interfaz de consulta legal.</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 LexConsult - Desarrollado bajo estándares profesionales de desarrollo web full-stack.</p>
+    </footer>
+
+    <!-- Lógica de Interfaz y Conexión Asíncrona con el Backend -->
+    <script>
+        /**
+         * Alterna la visibilidad de la barra lateral de herramientas de manera fluida.
+         * Ajusta el diseño flexible del contenedor dashboard.
+         */
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar-devtools');
+            if (sidebar.style.display === 'none') {
+                sidebar.style.display = 'flex';
+            } else {
+                sidebar.style.display = 'none';
+            }
+        }
+
+        /**
+         * Controla la navegación por pestañas del panel de desarrollo.
+         */
+        function mostrarModulo(nombreModulo, event) {
+            const modulos = document.querySelectorAll('.content-module');
+            modulos.forEach(mod => mod.style.display = 'none');
+
+            const botones = document.querySelectorAll('.tab-btn');
+            botones.forEach(btn => btn.classList.remove('active'));
+
+            const moduloSeleccionado = document.getElementById('modulo-' + nombreModulo);
+            if (moduloSeleccionado) {
+                moduloSeleccionado.style.display = 'block';
+            }
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+        }
+
+        /**
+         * Realiza la petición asíncrona hacia la API de Flask para la consulta legal en tiempo real.
+         */
+        function realizarBusqueda() {
+            const query = document.getElementById('searchInput').value;
+            const contenedorResultados = document.getElementById('resultadosBusqueda');
+
+            if (query.trim() === '') {
+                contenedorResultados.innerHTML = '';
+                return;
+            }
+
+            fetch(`/api/buscar?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    contenedorResultados.innerHTML = '';
+                    if (data.length === 0) {
+                        contenedorResultados.innerHTML = '<p style="color: #666;">No se encontraron artículos legales asociados.</p>';
+                        return;
+                    }
+
+                    let html = '<div style="display: flex; flex-direction: column; gap: 15px;">';
+                    data.forEach(item => {
+                        html += `
+                            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px;">
+                                <span style="background: #2563eb; color: white; padding: 3px 8px; font-size: 12px; border-radius: 4px; font-weight: bold;">${item.codigo}</span>
+                                <h3 style="margin-top: 8px; color: #1e293b; font-size: 16px;">${item.articulo}: ${item.titulo}</h3>
+                                <p style="margin-top: 5px; color: #334155; font-size: 14px; line-height: 1.5;">${item.contenido}</p>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    contenedorResultados.innerHTML = html;
+                })
+                .catch(error => {
+                    console.error("Error al consultar la API legal:", error);
+                    contenedorResultados.innerHTML = '<p style="color: red;">Error al conectar con el servidor de base de datos.</p>';
+                });
+        }
+    </script>
+</body>
+</html>
